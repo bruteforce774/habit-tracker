@@ -3,6 +3,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 
+import Habit from "./models/Habit.js";
+
 dotenv.config();
 
 const app = express();
@@ -25,3 +27,12 @@ const start = async() => {
 };
 
 start();
+
+app.get("/api/habits", async (req, res) => {
+  try {
+    const habits = await Habit.find();
+    res.json(habits);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch habits" });
+  }
+})
