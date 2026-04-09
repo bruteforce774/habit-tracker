@@ -22,4 +22,6 @@ const start = async() => {
       console.error("Connection error:', err);
       process.exit(1);
   }
-}
+};
+
+start();
