@@ -35,4 +35,13 @@ app.get("/api/habits", async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch habits" });
   }
+});
+
+app.post("/api/habits", async (req, res) => {
+  try {
+    const habit = await Habit.create({ name: req.body.name });
+    res.status(201).json(habit);
+  } catch (err) {
+    res.status(400).json({ error: "Failed to create habit" });
+  }
 })
