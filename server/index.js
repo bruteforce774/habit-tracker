@@ -38,7 +38,7 @@ app.get("/api/habits", async (req, res) => {
   }
 });
 
-app.get("/api/completions", async (req, res) => {
+app.get("/api/completions/today", async (req, res) => {
   try {
     const today = new Date().toISOString().split("T")[0];
     const completions = await Completion.find({ date: today });
