@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 
 import Habit from "./models/Habit.js";
+import Completion from "./models/Completion.js"
 
 dotenv.config();
 
@@ -46,6 +47,18 @@ app.post("/api/habits", async (req, res) => {
   }
 })
 
+app.post("/api/completions", async (req, res) => {
+  try {
+    const completion = await Completion.create({
+      habitId: req.body.habitId,
+      date: req.body.date,
+    });
+    res.status(201).json(completion);
+  } catch (err) {
+    res.status(400).json({ error: "Failed to create completion" });
+  }
+})
+
 app.delete("/api/habits/:id", async (req, res) => {
   try {
     await Habit.findByIdAndDelete(req.params.id);
@@ -53,4 +66,4 @@ app.delete("/api/habits/:id", async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: "Failed to delete habit "});
   }
-})
+})  
