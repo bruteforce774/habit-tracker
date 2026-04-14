@@ -38,6 +38,16 @@ app.get("/api/habits", async (req, res) => {
   }
 });
 
+app.get("/api/completions", async (req, res) => {
+  try {
+    const today = new Date().toISOString().split("T")[0];
+    const completions = await Completion.find({ date: today });
+    res.json(completions);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch completions" });
+  }
+})
+
 app.post("/api/habits", async (req, res) => {
   try {
     const habit = await Habit.create({ name: req.body.name });
