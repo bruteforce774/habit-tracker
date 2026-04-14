@@ -45,3 +45,12 @@ app.post("/api/habits", async (req, res) => {
     res.status(400).json({ error: "Failed to create habit" });
   }
 })
+
+app.delete("/api/habits/:id", async (req, res) => {
+  try {
+    await Habit.findByIdAndDelete(req.params.id);
+    res.status(204).send();
+  } catch (err) {
+    res.status(500).json({ error: "Failed to delete habit "});
+  }
+})
