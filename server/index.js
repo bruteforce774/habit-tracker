@@ -48,6 +48,35 @@ app.get("/api/completions/today", async (req, res) => {
   }
 })
 
+app.get('/api/completions/streak/:habitId', async (req, res) => {
+  try {
+    const completions = await Completion.find({
+      habitId: req.params.habitId
+    }).sort({ date: -1 });
+
+    let streak = 0;
+    let current = new Date();
+
+    for (const completion of completions) {
+      const completionDate = new Date(completion.date);
+      const diffDays = Math.round(
+        (current - completionDate) / (1000 * 60 * 60 * 24)
+      );
+
+      if(diffDays <= 1) {
+        streak++;
+        current = completionDate;
+      } else {
+        break;
+      }
+    }
+
+    res.json({ streak });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to calculate streak "});
+  }
+});
+
 app.post("/api/habits", async (req, res) => {
   try {
     const habit = await Habit.create({ name: req.body.name });
