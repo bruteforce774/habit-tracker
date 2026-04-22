@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { getStreak } from "../api";
 
 export default function HabitList({ habits, completions, onDelete, onComplete }) {
   const [streaks, setStreaks] = useState({});
@@ -8,33 +8,32 @@ export default function HabitList({ habits, completions, onDelete, onComplete })
     const fetchStreaks = async () => {
       const results = {};
       for (const habit of habits) {
-        const res = await axios.get(`/api/completions/streak/${habit._id}`);
-        results[habit._id] = res.data.streak;
+        const data = await getStreak(habit.id);
+        results[habit.id] = data.streak;
       }
       setStreaks(results);
     };
-
     if (habits.length > 0) {
       fetchStreaks();
     }
   }, [habits]);
-  
+
   return (
     <ul>
       {habits.map((habit) => {
         const isCompleted = completions.some(
-          (c) => c.habitId === habit._id
+          (c) => c.habit_id === habit.id
         );
         return (
-          <li key={habit._id}>
+          <li key={habit.id}>
             <input
               type="checkbox"
               checked={isCompleted}
-              onChange={() => !isCompleted && onComplete(habit._id)}
+              onChange={() => !isCompleted && onComplete(habit.id)}
             />
             <span>{habit.name}</span>
-            <span>🔥 {streaks[habit._id] ?? 0}</span>
-            <button onClick={() => onDelete(habit._id)}>Delete</button>
+            <span>🔥 {streaks[habit.id] ?? 0}</span>
+            <button onClick={() => onDelete(habit.id)}>Delete</button>
           </li>
         );
       })}
