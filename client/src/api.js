@@ -15,7 +15,7 @@ export async function addHabit(name) {
 }
 
 export async function deleteHabit(id) {
-  await fetch(`${BASE}/habits.php/${id}`, { method: 'DELETE' });
+  await fetch(`${BASE}/habits.php/id=${id}`, { method: 'DELETE' });
 }
 
 export async function getTodayCompletions() {
