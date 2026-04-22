@@ -1,22 +1,20 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { getHabits, addHabit, deleteHabit, getTodayCompletions, addCompletion } from './api';
 import HabitForm from './components/HabitForm';
 import HabitList from './components/HabitList';
 
 export default function App() {
-  // state
   const [habits, setHabits] = useState([]);
   const [completions, setCompletions] = useState([]);
 
-  // data fetching
   const fetchHabits = async () => {
-    const res = await axios.get('/api/habits');
-    setHabits(res.data);
+    const data = await getHabits();
+    setHabits(data);
   };
 
   const fetchCompletions = async () => {
-    const res = await axios.get('/api/completions/today');
-    setCompletions(res.data);
+    const data = await getTodayCompletions();
+    setCompletions(data);
   };
 
   useEffect(() => {
@@ -24,24 +22,21 @@ export default function App() {
     fetchCompletions();
   }, []);
 
-  // handlers
   const handleAddHabit = async (name) => {
-    await axios.post('/api/habits', { name });
+    await addHabit(name);
     await fetchHabits();
   };
 
   const handleDelete = async (id) => {
-    await axios.delete(`/api/habits/${id}`);
+    await deleteHabit(id);
     await fetchHabits();
   };
 
   const handleComplete = async (habitId) => {
-    const today = new Date().toISOString().split('T')[0];
-    await axios.post('/api/completions', { habitId, date: today });
+    await addCompletion(habitId);
     await fetchCompletions();
   };
 
-  // JSX
   return (
     <div>
       <h1>Habit Tracker</h1>
