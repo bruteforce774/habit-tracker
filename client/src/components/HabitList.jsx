@@ -6,11 +6,11 @@ export default function HabitList({ habits, completions, onDelete, onComplete })
 
   useEffect(() => {
     const fetchStreaks = async () => {
+      const data = await Promise.all(habits.map(habit => getStreak(habit.id)));
       const results = {};
-      for (const habit of habits) {
-        const data = await getStreak(habit.id);
-        results[habit.id] = data.streak;
-      }
+      habits.forEach((habit, i) => {
+        results[habit.id] = data[i].streak;
+      });
       setStreaks(results);
     };
     if (habits.length > 0) {
