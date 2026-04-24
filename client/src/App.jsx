@@ -35,6 +35,7 @@ export default function App() {
   const handleComplete = async (habitId) => {
     await addCompletion(habitId);
     await fetchCompletions();
+    await fetchHabits();
   };
 
   return (
