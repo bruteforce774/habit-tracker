@@ -9,7 +9,7 @@ export default function App() {
 
   const fetchHabits = async () => {
     const data = await getHabits();
-    setHabits(data);
+    setHabits([...data]);
   };
 
   const fetchCompletions = async () => {
